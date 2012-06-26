@@ -1,0 +1,21 @@
+table.campaign-articles tr td {
+	padding:				2px 5px;
+}
+
+table.campaign-articles tr.selected {
+	background-color:		#488DB4;
+	color:					white;
+	font-weight:			bold;
+}
+
+td.campaign-action-buttons div button.selected {
+	background:				white;
+}
+
+td.campaign-action-buttons div button.selected {
+	background:				white;
+}
+
+img.campaignImage, img.journalArticleImage {
+	width:					130px;
+}

@@ -1,0 +1,19 @@
+the-event-could-not-be-found=L'\u00E9v\u00E8nement n'a pas pu \u00EAtre trouv\u00E9.
+use-my-account-to-change-regular-account-settings=Utilisez <a href="{0}">Mon Compte</a> pour modifier les param\u00E8tres principaux du compte comme la photo ou le mot de passe.
+you-have-to-be-signed-in-to-register-for-this-event=Vous devez vous authentifier pour vous inscrire \u00E0 cet \u00E9v\u00E8nement. Veuillez vous <a href="{0}">authentifier</a> ou <a href="{1}">cr\u00E9er un compte</a> si vous n'en n'avez pas.
+visibility-all=Portail complet
+visibility-group=Uniquement ce groupe
+visibility-othergroups=Tous les sites sauf celui-ci
+visibility-help=La valeur "Uniquement ce groupe" permet de limiter la visibilité de cet \u00E9v\u00E8nement \u00E0 ce groupe. Le comportement par d\u00E9faut est d'autoriser l'affichage et l'inscription \u00E0 cet \u00E9v\u00E8nement sur tous les groupes du portail.
+visibility-to-display=S\u00E9lectionnez un filtre \u00E0 appliquer \u00E0 la recherche d'\u00E9v\u00E8nements.
+no-event-could-be-found=Aucun \u00E9v\u00E8nement n'a \u00E8t\u00E8 trouv\u00E8.
+suggestions-of-locations=Positions sugg\u00E9r\u00E9es
+default-map-position-help=Ces param\u00E8tres permettent de configurer la carte par d\u00E9faut qui sera affich\u00E9e \u00E0 l'utilisateur cr\u00E9ant un nouvel \u00E9v\u00E8nement 
+default-latitude=Latitude par d\u00E9faut du centre de la carte
+default-longitude=Longitude par d\u00E9faut du centre de la carte
+default-zoom=Niveau de zoom par d\u00E9faut
+default-location=Adresse par d\u00E9faut
+display-map-on-view=Montrer la carte lors de l'affichage de l'\u00E9v\u00E8nement
+do-not-display-map-on-view=Ne pas montrer la carte lors de l'affichage de l'\u00E9v\u00E8nement
+latitude=Latitude
+longitude=Longitudemy-events=My Events

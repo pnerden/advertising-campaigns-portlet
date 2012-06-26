@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="org.lsp.liferay.portlet.advertising.model.Campaign" />
+	<import class="org.lsp.liferay.portlet.advertising.model.CampaignLog" />
+	<class name="org.lsp.liferay.portlet.advertising.model.impl.CampaignImpl" table="LSPAC_Campaign">
+		<cache usage="read-write" />
+		<id name="campaignId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="journalArticlePrimaryKey" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="beginDate" type="org.hibernate.type.TimestampType" />
+		<property name="endDate" type="org.hibernate.type.TimestampType" />
+		<property name="campaignStatus" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+	<class name="org.lsp.liferay.portlet.advertising.model.impl.CampaignLogImpl" table="LSPAC_CampaignLog">
+		<cache usage="read-write" />
+		<id name="campaignLogId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="campaignId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+</hibernate-mapping>
