@@ -99,6 +99,10 @@ public class CampaignModelImpl extends BaseModelImpl<Campaign>
 	 * @return the normal model instance
 	 */
 	public static Campaign toModel(CampaignSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		Campaign model = new CampaignImpl();
 
 		model.setCompanyId(soapModel.getCompanyId());
@@ -118,6 +122,10 @@ public class CampaignModelImpl extends BaseModelImpl<Campaign>
 	 * @return the normal model instances
 	 */
 	public static List<Campaign> toModels(CampaignSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<Campaign> models = new ArrayList<Campaign>(soapModels.length);
 
 		for (CampaignSoap soapModel : soapModels) {
@@ -326,17 +334,6 @@ public class CampaignModelImpl extends BaseModelImpl<Campaign>
 	}
 
 	@Override
-	public Campaign toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Campaign)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
 			Campaign.class.getName(), getPrimaryKey());
@@ -347,6 +344,17 @@ public class CampaignModelImpl extends BaseModelImpl<Campaign>
 		ExpandoBridge expandoBridge = getExpandoBridge();
 
 		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public Campaign toEscapedModel() {
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (Campaign)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModelProxy;
 	}
 
 	@Override

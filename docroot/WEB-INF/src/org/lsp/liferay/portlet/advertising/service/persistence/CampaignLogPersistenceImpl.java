@@ -366,6 +366,7 @@ public class CampaignLogPersistenceImpl extends BasePersistenceImpl<CampaignLog>
 		if (isNew || !CampaignLogModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((campaignLogModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CAMPAIGNID.getColumnBitmask()) != 0) {
@@ -418,6 +419,7 @@ public class CampaignLogPersistenceImpl extends BasePersistenceImpl<CampaignLog>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CAMPAIGNLOGID,
 					args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CAMPAIGNLOGID,
 					args);
 
@@ -438,6 +440,7 @@ public class CampaignLogPersistenceImpl extends BasePersistenceImpl<CampaignLog>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LOGFINDER,
 					args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_LOGFINDER,
 					args);
 
@@ -863,10 +866,6 @@ public class CampaignLogPersistenceImpl extends BasePersistenceImpl<CampaignLog>
 	/**
 	 * Returns the first campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param campaignId the campaign ID
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -877,35 +876,51 @@ public class CampaignLogPersistenceImpl extends BasePersistenceImpl<CampaignLog>
 	public CampaignLog findByCampaignId_First(long campaignId, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCampaignLogException, SystemException {
+		CampaignLog campaignLog = fetchByCampaignId_First(campaignId,
+				companyId, orderByComparator);
+
+		if (campaignLog != null) {
+			return campaignLog;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("campaignId=");
+		msg.append(campaignId);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCampaignLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the first campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
+	 *
+	 * @param campaignId the campaign ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching campaign log, or <code>null</code> if a matching campaign log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CampaignLog fetchByCampaignId_First(long campaignId, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<CampaignLog> list = findByCampaignId(campaignId, companyId, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("campaignId=");
-			msg.append(campaignId);
-
-			msg.append(", companyId=");
-			msg.append(companyId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchCampaignLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param campaignId the campaign ID
 	 * @param companyId the company ID
@@ -917,37 +932,53 @@ public class CampaignLogPersistenceImpl extends BasePersistenceImpl<CampaignLog>
 	public CampaignLog findByCampaignId_Last(long campaignId, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCampaignLogException, SystemException {
+		CampaignLog campaignLog = fetchByCampaignId_Last(campaignId, companyId,
+				orderByComparator);
+
+		if (campaignLog != null) {
+			return campaignLog;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("campaignId=");
+		msg.append(campaignId);
+
+		msg.append(", companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCampaignLogException(msg.toString());
+	}
+
+	/**
+	 * Returns the last campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
+	 *
+	 * @param campaignId the campaign ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching campaign log, or <code>null</code> if a matching campaign log could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CampaignLog fetchByCampaignId_Last(long campaignId, long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCampaignId(campaignId, companyId);
 
 		List<CampaignLog> list = findByCampaignId(campaignId, companyId,
 				count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("campaignId=");
-			msg.append(campaignId);
-
-			msg.append(", companyId=");
-			msg.append(companyId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchCampaignLogException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the campaign logs before and after the current campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param campaignLogId the primary key of the current campaign log
 	 * @param campaignId the campaign ID
@@ -1373,13 +1404,14 @@ public class CampaignLogPersistenceImpl extends BasePersistenceImpl<CampaignLog>
 	 *
 	 * @param campaignLogId the campaign log ID
 	 * @param companyId the company ID
+	 * @return the campaign log that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void removeByCampaignLogId(long campaignLogId, long companyId)
+	public CampaignLog removeByCampaignLogId(long campaignLogId, long companyId)
 		throws NoSuchCampaignLogException, SystemException {
 		CampaignLog campaignLog = findByCampaignLogId(campaignLogId, companyId);
 
-		remove(campaignLog);
+		return remove(campaignLog);
 	}
 
 	/**
@@ -1402,13 +1434,14 @@ public class CampaignLogPersistenceImpl extends BasePersistenceImpl<CampaignLog>
 	 * @param campaignId the campaign ID
 	 * @param companyId the company ID
 	 * @param userId the user ID
+	 * @return the campaign log that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void removeByLogFinder(long campaignId, long companyId, long userId)
-		throws NoSuchCampaignLogException, SystemException {
+	public CampaignLog removeByLogFinder(long campaignId, long companyId,
+		long userId) throws NoSuchCampaignLogException, SystemException {
 		CampaignLog campaignLog = findByLogFinder(campaignId, companyId, userId);
 
-		remove(campaignLog);
+		return remove(campaignLog);
 	}
 
 	/**

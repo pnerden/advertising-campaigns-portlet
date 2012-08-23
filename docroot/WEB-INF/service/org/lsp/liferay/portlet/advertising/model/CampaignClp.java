@@ -61,6 +61,7 @@ public class CampaignClp extends BaseModelImpl<Campaign> implements Campaign {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -74,6 +75,7 @@ public class CampaignClp extends BaseModelImpl<Campaign> implements Campaign {
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		Long companyId = (Long)attributes.get("companyId");
 

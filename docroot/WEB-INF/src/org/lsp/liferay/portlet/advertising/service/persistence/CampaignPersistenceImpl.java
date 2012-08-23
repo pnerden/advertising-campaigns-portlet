@@ -123,27 +123,6 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 			"java.lang.Integer", "java.lang.Integer",
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVECAMPAIGNSBYDATE =
-		new FinderPath(CampaignModelImpl.ENTITY_CACHE_ENABLED,
-			CampaignModelImpl.FINDER_CACHE_ENABLED, CampaignImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByActiveCampaignsByDate",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Date.class.getName(), Date.class.getName()
-			},
-			CampaignModelImpl.COMPANYID_COLUMN_BITMASK |
-			CampaignModelImpl.CAMPAIGNSTATUS_COLUMN_BITMASK |
-			CampaignModelImpl.BEGINDATE_COLUMN_BITMASK |
-			CampaignModelImpl.ENDDATE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_ACTIVECAMPAIGNSBYDATE = new FinderPath(CampaignModelImpl.ENTITY_CACHE_ENABLED,
-			CampaignModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByActiveCampaignsByDate",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Date.class.getName(), Date.class.getName()
-			});
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_ACTIVECAMPAIGNSBYDATE =
 		new FinderPath(CampaignModelImpl.ENTITY_CACHE_ENABLED,
 			CampaignModelImpl.FINDER_CACHE_ENABLED, Long.class,
@@ -381,6 +360,7 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 		if (isNew || !CampaignModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((campaignModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
@@ -400,37 +380,6 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((campaignModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVECAMPAIGNSBYDATE.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(campaignModelImpl.getOriginalCompanyId()),
-						Integer.valueOf(campaignModelImpl.getOriginalCampaignStatus()),
-						
-						campaignModelImpl.getOriginalBeginDate(),
-						
-						campaignModelImpl.getOriginalEndDate()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVECAMPAIGNSBYDATE,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVECAMPAIGNSBYDATE,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(campaignModelImpl.getCompanyId()),
-						Integer.valueOf(campaignModelImpl.getCampaignStatus()),
-						
-						campaignModelImpl.getBeginDate(),
-						
-						campaignModelImpl.getEndDate()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACTIVECAMPAIGNSBYDATE,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVECAMPAIGNSBYDATE,
 					args);
 			}
 		}
@@ -455,6 +404,7 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CAMPAIGNID,
 					args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CAMPAIGNID,
 					args);
 
@@ -874,10 +824,6 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 	/**
 	 * Returns the first campaign in the ordered set where companyId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching campaign
@@ -887,31 +833,45 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 	public Campaign findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCampaignException, SystemException {
+		Campaign campaign = fetchByCompanyId_First(companyId, orderByComparator);
+
+		if (campaign != null) {
+			return campaign;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCampaignException(msg.toString());
+	}
+
+	/**
+	 * Returns the first campaign in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching campaign, or <code>null</code> if a matching campaign could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Campaign fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<Campaign> list = findByCompanyId(companyId, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchCampaignException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last campaign in the ordered set where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -922,34 +882,48 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 	public Campaign findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchCampaignException, SystemException {
+		Campaign campaign = fetchByCompanyId_Last(companyId, orderByComparator);
+
+		if (campaign != null) {
+			return campaign;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCampaignException(msg.toString());
+	}
+
+	/**
+	 * Returns the last campaign in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching campaign, or <code>null</code> if a matching campaign could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Campaign fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
 
 		List<Campaign> list = findByCompanyId(companyId, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchCampaignException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the campaigns before and after the current campaign in the ordered set where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param campaignId the primary key of the current campaign
 	 * @param companyId the company ID
@@ -1157,21 +1131,12 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVECAMPAIGNSBYDATE;
-			finderArgs = new Object[] {
-					companyId, campaignStatus, beginDate, endDate
-				};
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVECAMPAIGNSBYDATE;
-			finderArgs = new Object[] {
-					companyId, campaignStatus, beginDate, endDate,
-					
-					start, end, orderByComparator
-				};
-		}
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_ACTIVECAMPAIGNSBYDATE;
+		finderArgs = new Object[] {
+				companyId, campaignStatus, beginDate, endDate,
+				
+				start, end, orderByComparator
+			};
 
 		List<Campaign> list = (List<Campaign>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
@@ -1278,10 +1243,6 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 	/**
 	 * Returns the first campaign in the ordered set where companyId = &#63; and campaignStatus = &#63; and beginDate &le; &#63; and endDate &ge; &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param companyId the company ID
 	 * @param campaignStatus the campaign status
 	 * @param beginDate the begin date
@@ -1295,41 +1256,60 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 		int campaignStatus, Date beginDate, Date endDate,
 		OrderByComparator orderByComparator)
 		throws NoSuchCampaignException, SystemException {
+		Campaign campaign = fetchByActiveCampaignsByDate_First(companyId,
+				campaignStatus, beginDate, endDate, orderByComparator);
+
+		if (campaign != null) {
+			return campaign;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", campaignStatus=");
+		msg.append(campaignStatus);
+
+		msg.append(", beginDate=");
+		msg.append(beginDate);
+
+		msg.append(", endDate=");
+		msg.append(endDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCampaignException(msg.toString());
+	}
+
+	/**
+	 * Returns the first campaign in the ordered set where companyId = &#63; and campaignStatus = &#63; and beginDate &le; &#63; and endDate &ge; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param campaignStatus the campaign status
+	 * @param beginDate the begin date
+	 * @param endDate the end date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching campaign, or <code>null</code> if a matching campaign could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Campaign fetchByActiveCampaignsByDate_First(long companyId,
+		int campaignStatus, Date beginDate, Date endDate,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<Campaign> list = findByActiveCampaignsByDate(companyId,
 				campaignStatus, beginDate, endDate, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(10);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(", campaignStatus=");
-			msg.append(campaignStatus);
-
-			msg.append(", beginDate=");
-			msg.append(beginDate);
-
-			msg.append(", endDate=");
-			msg.append(endDate);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchCampaignException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last campaign in the ordered set where companyId = &#63; and campaignStatus = &#63; and beginDate &le; &#63; and endDate &ge; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param companyId the company ID
 	 * @param campaignStatus the campaign status
@@ -1344,6 +1324,48 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 		int campaignStatus, Date beginDate, Date endDate,
 		OrderByComparator orderByComparator)
 		throws NoSuchCampaignException, SystemException {
+		Campaign campaign = fetchByActiveCampaignsByDate_Last(companyId,
+				campaignStatus, beginDate, endDate, orderByComparator);
+
+		if (campaign != null) {
+			return campaign;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", campaignStatus=");
+		msg.append(campaignStatus);
+
+		msg.append(", beginDate=");
+		msg.append(beginDate);
+
+		msg.append(", endDate=");
+		msg.append(endDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCampaignException(msg.toString());
+	}
+
+	/**
+	 * Returns the last campaign in the ordered set where companyId = &#63; and campaignStatus = &#63; and beginDate &le; &#63; and endDate &ge; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param campaignStatus the campaign status
+	 * @param beginDate the begin date
+	 * @param endDate the end date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching campaign, or <code>null</code> if a matching campaign could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Campaign fetchByActiveCampaignsByDate_Last(long companyId,
+		int campaignStatus, Date beginDate, Date endDate,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByActiveCampaignsByDate(companyId, campaignStatus,
 				beginDate, endDate);
 
@@ -1351,38 +1373,15 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 				campaignStatus, beginDate, endDate, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(10);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(", campaignStatus=");
-			msg.append(campaignStatus);
-
-			msg.append(", beginDate=");
-			msg.append(beginDate);
-
-			msg.append(", endDate=");
-			msg.append(endDate);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchCampaignException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the campaigns before and after the current campaign in the ordered set where companyId = &#63; and campaignStatus = &#63; and beginDate &le; &#63; and endDate &ge; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param campaignId the primary key of the current campaign
 	 * @param companyId the company ID
@@ -1895,13 +1894,14 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 	 *
 	 * @param campaignId the campaign ID
 	 * @param companyId the company ID
+	 * @return the campaign that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void removeByCampaignId(long campaignId, long companyId)
+	public Campaign removeByCampaignId(long campaignId, long companyId)
 		throws NoSuchCampaignException, SystemException {
 		Campaign campaign = findByCampaignId(campaignId, companyId);
 
-		remove(campaign);
+		return remove(campaign);
 	}
 
 	/**
@@ -2073,7 +2073,7 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 				companyId, campaignStatus, beginDate, endDate
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ACTIVECAMPAIGNSBYDATE,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_ACTIVECAMPAIGNSBYDATE,
 				finderArgs, this);
 
 		if (count == null) {
@@ -2132,7 +2132,7 @@ public class CampaignPersistenceImpl extends BasePersistenceImpl<Campaign>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ACTIVECAMPAIGNSBYDATE,
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_ACTIVECAMPAIGNSBYDATE,
 					finderArgs, count);
 
 				closeSession(session);

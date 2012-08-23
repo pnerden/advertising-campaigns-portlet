@@ -196,10 +196,6 @@ public interface CampaignLogPersistence extends BasePersistence<CampaignLog> {
 	/**
 	* Returns the first campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param campaignId the campaign ID
 	* @param companyId the company ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -214,11 +210,21 @@ public interface CampaignLogPersistence extends BasePersistence<CampaignLog> {
 			org.lsp.liferay.portlet.advertising.NoSuchCampaignLogException;
 
 	/**
-	* Returns the last campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
+	* Returns the first campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param campaignId the campaign ID
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching campaign log, or <code>null</code> if a matching campaign log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.lsp.liferay.portlet.advertising.model.CampaignLog fetchByCampaignId_First(
+		long campaignId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
 	*
 	* @param campaignId the campaign ID
 	* @param companyId the company ID
@@ -234,11 +240,21 @@ public interface CampaignLogPersistence extends BasePersistence<CampaignLog> {
 			org.lsp.liferay.portlet.advertising.NoSuchCampaignLogException;
 
 	/**
-	* Returns the campaign logs before and after the current campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
+	* Returns the last campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param campaignId the campaign ID
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching campaign log, or <code>null</code> if a matching campaign log could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.lsp.liferay.portlet.advertising.model.CampaignLog fetchByCampaignId_Last(
+		long campaignId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the campaign logs before and after the current campaign log in the ordered set where campaignId = &#63; and companyId = &#63;.
 	*
 	* @param campaignLogId the primary key of the current campaign log
 	* @param campaignId the campaign ID
@@ -344,9 +360,11 @@ public interface CampaignLogPersistence extends BasePersistence<CampaignLog> {
 	*
 	* @param campaignLogId the campaign log ID
 	* @param companyId the company ID
+	* @return the campaign log that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public void removeByCampaignLogId(long campaignLogId, long companyId)
+	public org.lsp.liferay.portlet.advertising.model.CampaignLog removeByCampaignLogId(
+		long campaignLogId, long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.lsp.liferay.portlet.advertising.NoSuchCampaignLogException;
 
@@ -366,9 +384,11 @@ public interface CampaignLogPersistence extends BasePersistence<CampaignLog> {
 	* @param campaignId the campaign ID
 	* @param companyId the company ID
 	* @param userId the user ID
+	* @return the campaign log that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public void removeByLogFinder(long campaignId, long companyId, long userId)
+	public org.lsp.liferay.portlet.advertising.model.CampaignLog removeByLogFinder(
+		long campaignId, long companyId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.lsp.liferay.portlet.advertising.NoSuchCampaignLogException;
 

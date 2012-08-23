@@ -55,4 +55,9 @@
 		
 	</entity>
 	
+	<exceptions>
+		<exception>CampaignEndDate</exception>
+		<exception>CampaignStartDate</exception>
+	</exceptions>
+	
 </service-builder>

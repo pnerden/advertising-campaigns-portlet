@@ -141,7 +141,11 @@ if (articles.size() <= 0) {
 		</aui:button-row>
 	</form>
 	
-	<script>
+	<aui:script>
+		function <portlet:namespace />updateCampaign() {
+			submitForm(document.<portlet:namespace />fm);
+		};
+		
 		<portlet:namespace />selectJournalArticle = function(articleId) {
 			var children = document.getElementById('<portlet:namespace />_articles_').getElementsByTagName('tr');
 			for (var i=0;i<children.length;i++) {
@@ -149,8 +153,8 @@ if (articles.size() <= 0) {
 			}
 			document.getElementById('<portlet:namespace />journalArticlePrimaryKey').value=articleId;
 			document.getElementById('<portlet:namespace />_article_'+articleId).className="selected";
-		}
-	</script>
+		};
+	</aui:script>
 
 <%	
 }

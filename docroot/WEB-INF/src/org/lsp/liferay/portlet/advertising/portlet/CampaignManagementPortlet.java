@@ -1,6 +1,5 @@
 package org.lsp.liferay.portlet.advertising.portlet;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -9,6 +8,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
+import org.lsp.liferay.portlet.advertising.CampaignEndDateException;
+import org.lsp.liferay.portlet.advertising.CampaignStartDateException;
 import org.lsp.liferay.portlet.advertising.service.CampaignServiceUtil;
 import org.lsp.liferay.portlet.advertising.util.CampaignConstants;
 
@@ -16,6 +17,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
@@ -32,7 +35,10 @@ public class CampaignManagementPortlet extends MVCPortlet {
 		long journalArticlePrimaryKey = ParamUtil.getLong(uploadPortletRequest,"journalArticlePrimaryKey");
 		
 		if (journalArticlePrimaryKey > 0) {
-			SimpleDateFormat df = new SimpleDateFormat("MM dd yyyy HH:mm");
+			ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest
+					.getAttribute(WebKeys.THEME_DISPLAY);
+
+			User user = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 			
 			int beginDateMonth = ParamUtil.getInteger(uploadPortletRequest,"beginDateMonth");
 			int beginDateDay = ParamUtil.getInteger(uploadPortletRequest,"beginDateDay");
@@ -45,8 +51,8 @@ public class CampaignManagementPortlet extends MVCPortlet {
 				beginDateHour += 12;
 			}
 			
-			String beginDateString = beginDateMonth+" "+beginDateDay+" "+beginDateYear+" "+beginDateHour+":"+beginDateMinute;
-			Date beginDate = df.parse(beginDateString);
+			Date beginDate = PortalUtil.getDate(beginDateMonth, beginDateDay, beginDateYear, beginDateHour, beginDateMinute,
+								user.getTimeZone(), CampaignStartDateException.class);
 			
 			int endDateMonth = ParamUtil.getInteger(uploadPortletRequest,"endDateMonth");
 			int endDateDay = ParamUtil.getInteger(uploadPortletRequest,"endDateDay");
@@ -57,10 +63,13 @@ public class CampaignManagementPortlet extends MVCPortlet {
 	
 			if (endDateAmPm == Calendar.PM) {
 				endDateHour += 12;
+				System.out.println("Bullshit !!");
 			}
 			
-			String endDateString = endDateMonth+" "+endDateDay+" "+endDateYear+" "+endDateHour+":"+endDateMinute;
-			Date endDate = df.parse(endDateString);
+			Date endDate = PortalUtil.getDate(endDateMonth, endDateDay, endDateYear, endDateHour, endDateMinute,
+					user.getTimeZone(), CampaignEndDateException.class);
+			
+			System.out.println(endDate.toString());
 			
 			if (campaignId <= 0) {		
 				CampaignServiceUtil.createCampaign(journalArticlePrimaryKey, beginDate, endDate);
